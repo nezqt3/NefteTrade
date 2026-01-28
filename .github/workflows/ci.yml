@@ -1,0 +1,16 @@
+name: CI (stub)
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CI stub
+        run: echo "CI is disabled. No actions executed."
