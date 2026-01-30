@@ -1,4 +1,4 @@
-.PHONY: backend
+.PHONY: backend frontend
 
 backend:
 	cd backend && npx ts-node app/app.ts

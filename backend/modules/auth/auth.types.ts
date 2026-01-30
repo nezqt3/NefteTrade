@@ -1,10 +1,10 @@
 export interface AuthRequest{
     email: string
     password: string
-    hash_password: string
     login: string
     numberPhone: string
     data: string
+    role: "admin" | "customer" | "contractor"
 }
 
 export interface AuthResponse{
@@ -13,14 +13,13 @@ export interface AuthResponse{
     user: {
         id: number
         email: string
-        hash_password: string
         login: string
         numberPhone: string
         data: string
     }
 }
 
-interface JwtPayload {
+export interface JwtPayload {
     userId: number
     role: "admin" | "customer" | "contractor"
 }
