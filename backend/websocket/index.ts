@@ -1,12 +1,12 @@
-import { WebSocketServer } from "ws";
+import {Server} from 'socket.io'
 
-export function initWsRouter(wss: WebSocketServer) {
+export function initWsRouter(wss: Server) {
   wss.on("connection", (socket) => {
-    socket.on("message", (message) => {
-      socket.send(`yep, ${message}`);
+    socket.on("event", (data) => {
+      socket.send(`yep, ${data}`);
     });
 
-    socket.on("close", () => {
+    socket.on("disconnect", () => {
       console.log("WS client disconnected");
     });
   });

@@ -6,3 +6,8 @@ export async function authController(req: TypedRequest<AuthRequest>, res: TypedR
     const result = await authService(req.body)
     res.json(result)
 }
+
+export async function registerController(req: TypedRequest<AuthRequest>, res: TypedResponse<AuthResponse>) {
+    const result = await authService(req.body)
+    res.json(result)
+}
