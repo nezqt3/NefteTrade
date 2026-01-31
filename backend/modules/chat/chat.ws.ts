@@ -2,9 +2,19 @@ import { Server } from "socket.io";
 import { Message } from "./chat.types";
 import { markMessagesAsReadInDB, sendMessageService } from "./chat.service";
 
+const onlineUsers: Record<string, string> = {};
+
 export function initWsRouter(io: Server) {
   io.on("connection", (socket) => {
     console.log(`Client connected: ${socket.id}`);
+
+    const { userId } = socket.handshake.query as { userId: string };
+
+    if (userId) {
+      onlineUsers[userId] = socket.id;
+
+      io.emit("userStatusChange", { userId, online: true });
+    }
 
     socket.on("joinChat", (chatId: string) => {
       socket.join(chatId);
@@ -28,6 +38,12 @@ export function initWsRouter(io: Server) {
 
     socket.on("disconnect", () => {
       console.log(`Client disconnected: ${socket.id}`);
+
+      if (userId && onlineUsers[userId] === socket.id) {
+        delete onlineUsers[userId];
+
+        io.emit("userStatusChange", { userId, online: false });
+      }
     });
   });
 }

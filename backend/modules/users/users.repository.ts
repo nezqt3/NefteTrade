@@ -23,3 +23,18 @@ export async function getUser(login: string) {
   const result = await pool.query(query, values);
   return result.rows[0];
 }
+
+export async function setUserOnline(userId: number) {
+  const now = new Date();
+  const query = "UPDATE users SET last_online = $1 WHERE id = $2";
+  const values = [now, userId];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}
+
+export async function getStatus(userId: number) {
+  const query = "SELECT last_online FROM users WHERE id = $1";
+  const values = [userId];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}

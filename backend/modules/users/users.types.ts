@@ -5,4 +5,5 @@ export interface User {
   numberPhone: string;
   data: string;
   role: string;
+  last_online: string;
 }

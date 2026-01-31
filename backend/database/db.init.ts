@@ -11,6 +11,7 @@ export async function initDatabase() {
       data VARCHAR(255) NOT NULL,
       role VARCHAR(255) NOT NULL DEFAULT 'customer',
       created_at TIMESTAMP DEFAULT NOW()
+      last_online TIMESTAMP DEFAULT NOW()
     );
   `);
 

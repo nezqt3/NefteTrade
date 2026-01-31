@@ -28,14 +28,7 @@ export async function loginService(data: AuthRequest): Promise<AuthResponse> {
   return {
     access_token: accessToken,
     refresh_token: refreshTokenId,
-    user: {
-      id: user.id,
-      email: user.email,
-      login: user.login,
-      numberPhone: user.numberPhone,
-      data: user.data,
-      role: user.role,
-    },
+    user: user,
   };
 }
 
@@ -68,14 +61,7 @@ export async function registerService(
   const response = {
     access_token: accessToken,
     refresh_token: refreshTokenId,
-    user: {
-      id: result.id,
-      email: data.email,
-      login: data.login,
-      numberPhone: data.numberPhone,
-      data: data.data,
-      role: data.role,
-    },
+    user: result,
   };
 
   return response;
