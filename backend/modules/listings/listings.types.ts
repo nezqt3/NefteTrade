@@ -1,16 +1,39 @@
 import { OilProduct } from "../../shared/constants";
 
+export type ListingStatus = "draft" | "active" | "completed" | "blocked";
+
 export interface ListingsFilter {
-  from?: string;
-  to?: string;
+  price?: {
+    gte?: number;
+    lte?: number;
+  };
   productType?: OilProduct;
-  minPrice?: number;
-  maxPrice?: number;
+  status?: ListingStatus;
+  createdAt?: {
+    gte?: Date;
+    lte?: Date;
+  };
+  limit: number;
+  offset: number;
+}
+
+export interface ListingsQuery {
+  limit?: string;
+  page?: string;
+
+  minPrice?: string;
+  maxPrice?: string;
+
+  productType?: string;
+  status?: string;
+
+  fromDate?: string;
+  toDate?: string;
 }
 
 export interface Listing {
   id: string;
-  ownerId: string;           
+  ownerId: string;
   loadAddress: string;
   unloadAddress: string;
   productType: OilProduct;
@@ -18,6 +41,6 @@ export interface Listing {
   loadingMethod: "top" | "bottom";
   pumpRequired: boolean;
   price: number;
-  status: "draft" | "active" | "completed" | "blocked";
+  status: ListingStatus;
   createdAt: Date;
 }
