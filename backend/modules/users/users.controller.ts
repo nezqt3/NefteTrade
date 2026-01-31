@@ -6,11 +6,12 @@ export async function setUserOnlineController(
   res: TypedResponse<any>,
 ) {
   try {
-    const userId = req.body.userId;
+    const userId = req.user!.userId;
     await setUserOnlineService(userId);
     res.status(200).json({ message: "User online" });
   } catch (error) {
     console.error("Error setting user online:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 

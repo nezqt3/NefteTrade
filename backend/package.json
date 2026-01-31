@@ -20,6 +20,8 @@
     "pg": "^8.17.2",
     "redis": "^5.10.0",
     "socket.io": "^4.8.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ws": "^8.19.0"
   },
   "devDependencies": {
@@ -28,6 +30,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.1.0",
     "@types/pg": "^8.16.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@types/ws": "^8.18.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

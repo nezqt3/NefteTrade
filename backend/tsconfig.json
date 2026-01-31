@@ -2,14 +2,24 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "CommonJS",
+    "moduleResolution": "node",
+
     "esModuleInterop": true,
     "strict": true,
+
     "outDir": "dist",
-    // "baseUrl": ".",
-    // "ignoreDeprecations": "6.0",
-    // "paths": {
-    //   "@app/*": ["app/*"],
-    //   "@modules/*": ["modules/*"]
-    // }
-  }
+
+    "baseUrl": ".",
+
+    "paths": {
+      "@app/*": ["app/*"],
+      "@modules/*": ["modules/*"],
+      "@utils/*": ["utils/*"],
+      "@redis/*": ["redis/*"]
+    },
+
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
