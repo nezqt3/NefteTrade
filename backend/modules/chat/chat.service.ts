@@ -1,4 +1,4 @@
-import { getMessages, sendMessage } from "./chat.repository";
+import { getMessages, markMessage, sendMessage } from "./chat.repository";
 import { Message } from "./chat.types";
 
 export async function getMessagesService(chatId: number) {
@@ -13,4 +13,8 @@ export async function getMessagesService(chatId: number) {
 
 export async function sendMessageService(message: Message) {
   await sendMessage(message);
+}
+
+export async function markMessagesAsReadInDB(messageIds: number[]) {
+  await markMessage(messageIds);
 }

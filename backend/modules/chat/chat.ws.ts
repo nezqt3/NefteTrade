@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import { Message } from "./chat.types";
-import { sendMessageService } from "./chat.service";
+import { markMessagesAsReadInDB, sendMessageService } from "./chat.service";
 
 export function initWsRouter(io: Server) {
   io.on("connection", (socket) => {
@@ -13,10 +13,17 @@ export function initWsRouter(io: Server) {
 
     socket.on("sendMessage", async (message: Message) => {
       message.created_at = Date.now();
+      message.read = false;
 
       await sendMessageService(message);
 
       io.to(message.chatId.toString()).emit("newMessage", message);
+    });
+
+    socket.on("markAsRead", async ({ chatId, messageIds, userId }) => {
+      await markMessagesAsReadInDB(messageIds);
+
+      socket.to(chatId).emit("messagesRead", { messageIds, userId });
     });
 
     socket.on("disconnect", () => {

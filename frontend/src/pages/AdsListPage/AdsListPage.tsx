@@ -106,7 +106,7 @@ export const AdsListPage: React.FC = () => {
           )}
         </div>
       </Content>
-      <Chat />
+      <Chat userId={localStorage.getItem("userId") || ""} chatId="1" />
     </Layout>
   );
 };

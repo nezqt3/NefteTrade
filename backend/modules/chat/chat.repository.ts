@@ -17,7 +17,7 @@ export async function getMessages(chatId: number) {
 export async function sendMessage(message: Message) {
   try {
     const query =
-      "INSERT INTO messages (chat_id, message, sender_id, created_at, read) VALUES ($1, $2, $3, $4, $5s)";
+      "INSERT INTO messages (chat_id, message, sender_id, created_at, read) VALUES ($1, $2, $3, $4, $5)";
     const values = [
       message.chatId,
       message.message,
@@ -28,6 +28,17 @@ export async function sendMessage(message: Message) {
     await pool.query(query, values);
   } catch (error) {
     console.error("Error sending message:", error);
+    throw error;
+  }
+}
+
+export async function markMessage(messageIds: number[]) {
+  try {
+    const query = "UPDATE messages SET read = true WHERE id = ANY($1)";
+    const values = [messageIds];
+    await pool.query(query, values);
+  } catch (error) {
+    console.error("Error marking message as read:", error);
     throw error;
   }
 }

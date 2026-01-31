@@ -3,6 +3,7 @@ import { io, Socket } from "socket.io-client";
 import "./Chat.css";
 
 export interface Message {
+  id?: number;
   chatId: string;
   message: string;
   senderId: string;
@@ -21,19 +22,30 @@ export function Chat({ chatId, userId }: { chatId: string; userId: string }) {
   const socketRef = useRef<Socket>();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:4000");
+    if (!messages.length) return;
 
-    socketRef.current.emit("joinChat", chatId);
+    const unreadIds = messages
+      .filter(
+        (msg) => msg.id !== undefined && !msg.read && msg.senderId !== userId,
+      )
+      .map((msg) => msg.id!);
 
-    // 3️⃣ Получение новых сообщений
-    socketRef.current.on("newMessage", (msg: Message) => {
-      setMessages((prev) => [...prev, msg]);
-    });
+    if (unreadIds.length) {
+      socketRef.current?.emit("markAsRead", {
+        chatId,
+        messageIds: unreadIds,
+        userId,
+      });
 
-    return () => {
-      socketRef.current?.disconnect();
-    };
-  }, [chatId]);
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id !== undefined && unreadIds.includes(msg.id)
+            ? { ...msg, read: true }
+            : msg,
+        ),
+      );
+    }
+  }, [messages]);
 
   const sendMessage = () => {
     if (!inputValue.trim()) return;
