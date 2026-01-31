@@ -1,9 +1,18 @@
 import { redis } from "../config/redis";
 import { JwtPayload } from "../modules/auth/auth.types";
-import { generateAccessToken, generateSecretOfRefreshToken } from "../utils/jwt";
+import {
+  generateAccessToken,
+  generateSecretOfRefreshToken,
+} from "../utils/jwt";
 
-export async function saveRefreshToken(tokenId: string, userId: number, role: string) {
-    await redis.set(`refresh:${tokenId}`, JSON.stringify({ userId, role }), { EX: 60 * 60 * 24 * 7 });
+export async function saveRefreshToken(
+  tokenId: string,
+  userId: number,
+  role: string,
+) {
+  await redis.set(`refresh:${tokenId}`, JSON.stringify({ userId, role }), {
+    EX: 60 * 60 * 24 * 7,
+  });
 }
 
 export async function verifyRefreshToken(tokenId: string): Promise<JwtPayload> {
@@ -18,6 +27,21 @@ export async function verifyRefreshToken(tokenId: string): Promise<JwtPayload> {
 
 export async function revokeRefreshToken(tokenId: string) {
   await redis.del(`refresh:${tokenId}`);
+}
+
+export async function setUserOnline(userId: string) {
+  await redis.set(`user:${userId}:online`, "1", {
+    EX: 60,
+  });
+}
+
+export async function setUserOffline(userId: string) {
+  await redis.del(`user:${userId}:online`);
+}
+
+export async function isUserOnline(userId: string) {
+  const status = await redis.get(`user:${userId}:online`);
+  return status === "1";
 }
 
 export async function refreshService(refreshTokenId: string) {
