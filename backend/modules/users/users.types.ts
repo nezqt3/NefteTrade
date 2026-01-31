@@ -1,3 +1,5 @@
+import { Role } from "shared/constants";
+
 export interface User {
   id: number;
   email: string;
@@ -5,5 +7,5 @@ export interface User {
   numberPhone: string;
   data: string;
   role: string;
-  last_online: string;
+  last_online: Role;
 }

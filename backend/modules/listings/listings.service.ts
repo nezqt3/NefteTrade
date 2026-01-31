@@ -1,4 +1,10 @@
-import { createListing, getListings } from "./listings.repository";
+import {
+  createListing,
+  deleteListing,
+  getListing,
+  getListings,
+  updateListing,
+} from "./listings.repository";
 import { Listing, ListingsFilter } from "./listings.types";
 
 export async function getListingsService(filter: ListingsFilter) {
@@ -14,6 +20,18 @@ export async function getListingsService(filter: ListingsFilter) {
   };
 }
 
+export async function getOneOfListingsService(listingId: string) {
+  try {
+    const listing = await getListing(listingId);
+    return listing;
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}
+
 export async function createListingService(body: Listing) {
   try {
     await createListing(body);
@@ -26,6 +44,31 @@ export async function createListingService(body: Listing) {
       success: true,
       message: "Listing created successfully",
     };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}
+
+export async function updateListingService(
+  body: Partial<Listing> & { id: string },
+) {
+  try {
+    await updateListing(body);
+    return { success: true };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}
+
+export async function deleteListingService(listingId: string) {
+  try {
+    await deleteListing(listingId);
   } catch (error: any) {
     return {
       success: false,

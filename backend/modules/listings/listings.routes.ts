@@ -1,15 +1,19 @@
 import { Router } from "express";
 import {
   createListingsController,
+  deleteListingsController,
   getListingsController,
+  getOneOfListingsController,
+  updateListingsController,
 } from "./listings.controller";
 import { authMiddleware } from "@modules/auth/auth.middleware";
+import { requireRole } from "./listings.permissions";
 
 const router = Router();
 
 /**
  * @swagger
- * /api/v1/listings:
+ * /api/v1/ads:
  *   get:
  *     summary: Получить список объявлений
  *     tags:
@@ -48,15 +52,103 @@ const router = Router();
  *               items:
  *                 $ref: '#/components/schemas/Listing'
  */
-router.get("/listings", getListingsController);
+router.get("/", getListingsController);
 
 /**
  * @swagger
- * /api/v1/listings:
+ * api/v1/ads/{id}:
+ *   get:
+ *     summary: Получить одно объявление по ID
+ *     tags: [Listings]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID объявления
+ *     responses:
+ *       200:
+ *         description: Объявление найдено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 listing:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "abc123"
+ *                     ownerId:
+ *                       type: string
+ *                       example: "user1"
+ *                     loadAddress:
+ *                       type: string
+ *                       example: "Москва"
+ *                     unloadAddress:
+ *                       type: string
+ *                       example: "Санкт-Петербург"
+ *                     productType:
+ *                       type: string
+ *                       example: "diesel"
+ *                     quantity:
+ *                       type: number
+ *                       example: 100
+ *                     loadingMethod:
+ *                       type: string
+ *                       example: "pump"
+ *                     pumpRequired:
+ *                       type: boolean
+ *                       example: true
+ *                     price:
+ *                       type: number
+ *                       example: 500
+ *                     status:
+ *                       type: string
+ *                       example: "active"
+ *       404:
+ *         description: Объявление не найдено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Listing not found"
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+router.get("/:id", getOneOfListingsController);
+
+/**
+ * @swagger
+ * /api/v1/ads:
  *   post:
- *     summary: Создать объявление
+ *     summary: Создать объявление (только для contractor)
  *     tags:
  *       - Listings
+ *     security:
+ *       - bearerAuth: []   # если у вас JWT или токен авторизации
  *     requestBody:
  *       required: true
  *       content:
@@ -73,10 +165,48 @@ router.get("/listings", getListingsController);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: have created
+ *                   example: Listing created successfully
+ *       403:
+ *         description: Доступ запрещён, только для contractor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: Forbidden: only contractors can create listings
  *       500:
  *         description: Ошибка при создании
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: Internal server error
  */
-router.post("/listings", createListingsController);
+router.post("/", requireRole("contractor"), createListingsController);
+
+router.post(
+  "/:id",
+  requireRole("contractor"),
+  requireRole("admin"),
+  updateListingsController,
+);
+
+router.post(
+  "/:id",
+  requireRole("contractor"),
+  requireRole("admin"),
+  deleteListingsController,
+);
 
 export default router;
