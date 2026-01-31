@@ -195,14 +195,133 @@ router.get("/:id", getOneOfListingsController);
  */
 router.post("/", requireRole("contractor"), createListingsController);
 
-router.post(
+/**
+ * @swagger
+ * /api/v1/ads/{id}:
+ *   patch:
+ *     summary: Обновить объявление (только для contractor и admin)
+ *     tags:
+ *       - Listings
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID объявления для обновления
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateListing'
+ *     responses:
+ *       200:
+ *         description: Объявление успешно обновлено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Listing updated successfully
+ *       403:
+ *         description: Доступ запрещён, только contractor или admin
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: Forbidden: insufficient permissions
+ *       404:
+ *         description: Объявление не найдено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: Listing not found
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+
+router.patch(
   "/:id",
   requireRole("contractor"),
   requireRole("admin"),
   updateListingsController,
 );
 
-router.post(
+/**
+ * @swagger
+ * /api/v1/ads/{id}:
+ *   delete:
+ *     summary: Удалить объявление (только для contractor и admin)
+ *     tags:
+ *       - Listings
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID объявления для удаления
+ *     responses:
+ *       200:
+ *         description: Объявление успешно удалено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Listing deleted successfully
+ *       403:
+ *         description: Доступ запрещён, только contractor или admin
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: Forbidden: insufficient permissions
+ *       404:
+ *         description: Объявление не найдено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: Listing not found
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+router.delete(
   "/:id",
   requireRole("contractor"),
   requireRole("admin"),
