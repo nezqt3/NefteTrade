@@ -34,6 +34,7 @@ export async function loginService(data: AuthRequest): Promise<AuthResponse> {
       login: user.login,
       numberPhone: user.numberPhone,
       data: user.data,
+      role: user.role,
     },
   };
 }
@@ -73,6 +74,7 @@ export async function registerService(
       login: data.login,
       numberPhone: data.numberPhone,
       data: data.data,
+      role: data.role,
     },
   };
 

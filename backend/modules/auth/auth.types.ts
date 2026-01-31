@@ -1,25 +1,22 @@
-export interface AuthRequest{
-    email: string
-    password: string
-    login: string
-    numberPhone: string
-    data: string
-    role: "admin" | "customer" | "contractor"
+import { Role } from "../../shared/constants";
+import { User } from "../users/users.types";
+
+export interface AuthRequest {
+  email: string;
+  password: string;
+  login: string;
+  numberPhone: string;
+  data: string;
+  role: Role;
 }
 
-export interface AuthResponse{
-    access_token: string
-    refresh_token: string
-    user: {
-        id: number
-        email: string
-        login: string
-        numberPhone: string
-        data: string
-    }
+export interface AuthResponse {
+  access_token: string;
+  refresh_token: string;
+  user: User;
 }
 
 export interface JwtPayload {
-    userId: number
-    role: "admin" | "customer" | "contractor"
+  userId: number;
+  role: Role;
 }

@@ -1,9 +1,7 @@
-import { connectToDatabase } from "../../config/database";
+import { pool } from "../../config/database";
 import { Listing, ListingsFilter } from "./listings.types";
 
 export async function getListings(filter: ListingsFilter) {
-  const client = await connectToDatabase();
-
   const conditions: string[] = [];
   const values: any[] = [];
 
@@ -53,15 +51,14 @@ export async function getListings(filter: ListingsFilter) {
 
   values.push(filter.limit, filter.offset);
 
-  const result = await client.query(query, values);
+  const result = await pool.query(query, values);
   return result.rows;
 }
 
 export async function createListing(listing: Listing): Promise<void> {
-  const client = await connectToDatabase();
   const query =
     "INSERT INTO listings (owner_id, load_address, unload_address, product_type, quantity, loading_method, pump_required, price, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)";
-  await client.query(query, [
+  await pool.query(query, [
     listing.ownerId,
     listing.loadAddress,
     listing.unloadAddress,

@@ -1,4 +1,5 @@
-import { connectToDatabase } from "../../config/database";
+import { pool } from "../../config/database";
+import { User } from "./users.types";
 
 export async function createUser(
   email: string,
@@ -7,24 +8,18 @@ export async function createUser(
   numberPhone: string,
   data: string,
   role: string,
-) {
-  const client = await connectToDatabase();
+): Promise<User> {
   const query =
-    "INSERT INTO users (email, hash_password, login, numberPhone, data, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *";
+    "INSERT INTO users (email, hash_password, login, numberPhone, data, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, email, login, numberPhone, data, role";
   const values = [email, hash_password, login, numberPhone, data, role];
-  const result = await client.query(query, values);
+  const { rows } = await pool.query<User>(query, values);
 
-  if (!result) {
-    throw new Error("Failed to create user");
-  }
-
-  return result.rows[0];
+  return rows[0] ?? null;
 }
 
 export async function getUser(login: string) {
-  const client = await connectToDatabase();
   const query = "SELECT * FROM users WHERE login = $1";
   const values = [login];
-  const result = await client.query(query, values);
+  const result = await pool.query(query, values);
   return result.rows[0];
 }

@@ -1,0 +1,195 @@
+.chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 380px;
+  height: 500px;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  border: 1px solid var(--border);
+}
+
+/* Шапка */
+.widget-header {
+  background: var(--primary);
+  color: white;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #4ade80;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Основная часть */
+.widget-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Узкая полоска со списком чатов слева */
+.mini-sidebar {
+  width: 60px;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  gap: 10px;
+}
+
+.mini-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-light);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.mini-avatar.active {
+  border-color: var(--primary);
+}
+
+/* Окно сообщений */
+.mini-chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-alt);
+}
+
+.messages-area {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  max-width: 85%;
+}
+
+.incoming {
+  background: var(--bg);
+  align-self: flex-start;
+  color: var(--text-dark);
+}
+
+.outgoing {
+  background: var(--primary);
+  color: white;
+  align-self: flex-end;
+}
+
+/* Ввод текста */
+.input-area {
+  padding: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 5px;
+}
+
+.input-area input {
+  flex: 1;
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 20px;
+  outline: none;
+}
+
+.send-icon {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chat-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(13, 148, 219, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+  z-index: 999;
+}
+
+.chat-trigger:hover {
+  transform: scale(1.1);
+  background: var(--primary-dark);
+}
+
+.trigger-icon {
+  font-size: 28px;
+  color: white;
+}
+
+/* Индикатор непрочитанных сообщений */
+.trigger-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #ff4d4f;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+/* Анимация появления окна */
+.chat-widget {
+  /* ... предыдущие стили из вашего кода ... */
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

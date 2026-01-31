@@ -5,3 +5,5 @@ export type OilProduct =
   | "lpg"
   | "mazut"
   | "oil";
+
+export type Role = "admin" | "customer" | "contractor";
