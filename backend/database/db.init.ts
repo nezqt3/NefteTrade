@@ -32,6 +32,19 @@ export async function initDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS orders (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      listing_id INT NOT NULL,
+      customer_id INT NOT NULL,
+      rate INT,
+      receiver_id INT NOT NULL,
+      status VARCHAR(255) NOT NULL DEFAULT 'draft',
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS chats (
       id SERIAL PRIMARY KEY,
       listing_id INT NOT NULL,

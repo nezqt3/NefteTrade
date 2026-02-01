@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authController, registerController } from "./auth.controller";
+import { AuthController } from "./auth.controller";
 import { authMiddleware, roleMiddleware } from "./auth.middleware";
 import { revokeRefreshToken } from "../../redis/cache";
 
@@ -51,7 +51,7 @@ const router = Router();
  *       400:
  *         description: Ошибка валидации или неверный логин/пароль
  */
-router.get("/login", authController);
+router.get("/login", AuthController.authController);
 
 /**
  * @swagger
@@ -123,7 +123,7 @@ router.get("/login", authController);
  *       400:
  *         description: Ошибка валидации или не удалось создать пользователя
  */
-router.get("/register", registerController);
+router.get("/register", AuthController.registerController);
 
 /**
  * @swagger
