@@ -6,6 +6,6 @@ export interface User {
   login: string;
   numberPhone: string;
   data: string;
-  role: string;
-  last_online: Role;
+  role: Role;
+  last_online: string;
 }
