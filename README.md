@@ -61,6 +61,6 @@ cd NefteTrade
 # Запуск и установка зависимостей backend
 make backend
 
-# Запуск и установка зависимостей backend
+# Запуск и установка зависимостей frontend
 make frontend
 ```
