@@ -1,8 +1,13 @@
 import { createUser, getUser } from "../users/users.repository";
 import { AuthRequest, AuthResponse } from "./auth.types";
 import { generateAccessToken } from "../../utils/jwt";
+import { redis } from "config/redis";
 import { comparePasswords, hashPassword } from "../../utils/hash";
-import { revokeRefreshToken, saveRefreshToken } from "../../redis/cache";
+import {
+  revokeRefreshToken,
+  saveRefreshToken,
+  verifyRefreshToken,
+} from "../../redis/cache";
 import { generateSecretOfRefreshToken } from "../../utils/jwt";
 
 export async function loginService(data: AuthRequest): Promise<AuthResponse> {
@@ -75,4 +80,21 @@ export async function logoutService(refreshToken: string) {
   await revokeRefreshToken(refreshToken);
 
   return { message: "Logged out successfully" };
+}
+
+export async function refreshService(refreshTokenId: string) {
+  const data = await verifyRefreshToken(refreshTokenId);
+  await revokeRefreshToken(refreshTokenId);
+
+  const { userId, role } = data;
+
+  const newAccessToken = generateAccessToken({ userId, role });
+  const newRefreshToken = generateSecretOfRefreshToken();
+
+  await saveRefreshToken(newRefreshToken, userId, role);
+
+  return {
+    access_token: newAccessToken,
+    refresh_token: newRefreshToken,
+  };
 }

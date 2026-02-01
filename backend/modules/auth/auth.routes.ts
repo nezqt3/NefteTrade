@@ -236,4 +236,38 @@ router.get("/admin", authMiddleware, roleMiddleware("admin"), (req, res) => {
   res.json({ secret: "admin stuff" });
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/refresh:
+ *   post:
+ *     summary: Обновление access и refresh токенов
+ *     tags:
+ *       - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refresh_token:
+ *                 type: string
+ *                 description: Действующий refresh токен
+ *     responses:
+ *       200:
+ *         description: Токены успешно обновлены
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 access_token:
+ *                   type: string
+ *                 refresh_token:
+ *                   type: string
+ *       401:
+ *         description: Некорректный или истёкший refresh токен
+ */
+router.post("/refresh", AuthController.refreshTokenController);
+
 export default router;

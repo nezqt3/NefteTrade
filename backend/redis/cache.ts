@@ -43,25 +43,3 @@ export async function isUserOnline(userId: string) {
   const status = await redis.get(`user:${userId}:online`);
   return status === "1";
 }
-
-export async function refreshService(refreshTokenId: string) {
-  const data = await redis.get(`refresh:${refreshTokenId}`);
-
-  if (!data) {
-    throw new Error("Invalid refresh token");
-  }
-
-  revokeRefreshToken(refreshTokenId);
-
-  const { userId, role } = JSON.parse(data);
-
-  const newAccessToken = generateAccessToken({ userId, role });
-  const newRefreshToken = generateSecretOfRefreshToken();
-
-  await saveRefreshToken(newRefreshToken, userId, role);
-
-  return {
-    access_token: newAccessToken,
-    refresh_token: newRefreshToken,
-  };
-}
