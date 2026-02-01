@@ -38,3 +38,10 @@ export async function getStatus(userId: number) {
   const result = await pool.query(query, values);
   return result.rows[0];
 }
+
+export async function confirmedUser(userId: number) {
+  const query = "UPDATE users SET confirmed = true WHERE id = $1";
+  const values = [userId];
+  const result = await pool.query(query, values);
+  return result.rows[0];
+}

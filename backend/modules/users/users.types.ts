@@ -8,4 +8,5 @@ export interface User {
   data: string;
   role: Role;
   last_online: string;
+  confirmed: boolean;
 }

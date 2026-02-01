@@ -1,4 +1,5 @@
-import { getStatus, setUserOnline } from "./users.repository";
+import { confirmedUser, getStatus, setUserOnline } from "./users.repository";
+import { User } from "./users.types";
 
 export async function setUserOnlineService(userId: number) {
   try {
@@ -19,4 +20,14 @@ export async function getStatusService(userId: number) {
   } catch (error) {
     console.error("Error getting user status:", error);
   }
+}
+
+export async function confirmedUserService(userId: number): Promise<User> {
+  const confirmed = await confirmedUser(userId);
+
+  if (!confirmed) {
+    throw new Error("User not found");
+  }
+
+  return confirmed;
 }

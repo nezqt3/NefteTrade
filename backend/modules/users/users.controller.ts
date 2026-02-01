@@ -1,5 +1,10 @@
+import { sendUserConfirmedEmail } from "@modules/notifications/notifications.mail";
 import { TypedRequest, TypedResponse } from "../../shared/http";
-import { getStatusService, setUserOnlineService } from "./users.service";
+import {
+  confirmedUserService,
+  getStatusService,
+  setUserOnlineService,
+} from "./users.service";
 
 export async function setUserOnlineController(
   req: TypedRequest<{ userId: number }>,
@@ -35,6 +40,32 @@ export async function getStatusController(
     res.status(200).json({ status });
   } catch (error) {
     console.error("Error getting user status:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function confirmedUserController(
+  req: TypedRequest<{ userId: number }>,
+  res: TypedResponse<any>,
+) {
+  try {
+    const userId = req.user!.userId;
+
+    if (!userId) {
+      return res.status(403).json({ message: "userId is required" });
+    }
+
+    const user = await confirmedUserService(userId);
+
+    process.nextTick(() => {
+      sendUserConfirmedEmail({ ...user, confirmed: true }).catch((err) => {
+        console.error("CONFIRM EMAIL ERROR:", err);
+      });
+    });
+
+    res.status(200).json({ message: "User confirmed" });
+  } catch (error) {
+    console.error("Error confirming user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }

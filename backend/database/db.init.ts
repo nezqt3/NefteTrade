@@ -9,6 +9,7 @@ export async function initDatabase() {
       login VARCHAR(255) UNIQUE NOT NULL,
       number_phone VARCHAR(255) NOT NULL,
       data VARCHAR(255) NOT NULL,
+      confirmed BOOLEAN DEFAULT FALSE,
       role VARCHAR(255) NOT NULL DEFAULT 'customer',
       created_at TIMESTAMP DEFAULT NOW()
       last_online TIMESTAMP DEFAULT NOW()
