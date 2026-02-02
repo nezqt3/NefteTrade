@@ -1,9 +1,7 @@
 import { logoutService } from "../../modules/auth/auth.service";
 import { revokeRefreshToken } from "../../redis/cache";
 
-jest.mock("../../redis/cache", () => ({
-  revokeRefreshToken: jest.fn(),
-}));
+jest.mock("../../redis/cache");
 
 describe("logoutService", () => {
   it("logs out user", async () => {

@@ -3,9 +3,16 @@ import { User } from "./users.types";
 
 export async function setUserOnlineService(userId: number) {
   try {
-    await setUserOnline(userId);
+    const result = await setUserOnline(userId);
+
+    if (!result) {
+      throw new Error("User not found");
+    }
+
+    return result;
   } catch (error) {
     console.error("Error setting user online:", error);
+    throw error;
   }
 }
 
@@ -19,6 +26,7 @@ export async function getStatusService(userId: number) {
     return lastOnline;
   } catch (error) {
     console.error("Error getting user status:", error);
+    throw error;
   }
 }
 
