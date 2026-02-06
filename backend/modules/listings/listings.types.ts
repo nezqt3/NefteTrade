@@ -7,12 +7,21 @@ export interface ListingsFilter {
     gte?: number;
     lte?: number;
   };
+  quantity?: {
+    gte?: number;
+    lte?: number;
+  };
   productType?: OilProduct;
   status?: ListingStatus;
   createdAt?: {
     gte?: Date;
     lte?: Date;
   };
+  loadAddress?: string;
+  unloadAddress?: string;
+  loadingMethod?: "top" | "bottom";
+  pumpRequired?: boolean;
+  ownerId?: string;
   limit: number;
   offset: number;
 }
@@ -29,6 +38,13 @@ export interface ListingsQuery {
 
   fromDate?: string;
   toDate?: string;
+
+  fromCity?: string;
+  toCity?: string;
+  quantityMin?: string;
+  quantityMax?: string;
+  loadingMethod?: string;
+  needsPump?: string;
 }
 
 export interface Listing {

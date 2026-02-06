@@ -1,4 +1,4 @@
-import { redis } from "config/redis";
+import { redis } from "../../config/redis";
 import { sendWelcomeEmail } from "./notifications.mail";
 
 async function start() {

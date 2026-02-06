@@ -1,5 +1,7 @@
-import { pool } from "../../config/database";
+import { query } from "../../config/database";
 import { User } from "./users.types";
+
+export type UserWithPassword = User & { hash_password: string };
 
 export async function createUser(
   email: string,
@@ -8,40 +10,74 @@ export async function createUser(
   numberPhone: string,
   data: string,
   role: string,
-): Promise<User> {
-  const query =
-    "INSERT INTO users (email, hash_password, login, numberPhone, data, role) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, email, login, numberPhone, data, role";
-  const values = [email, hash_password, login, numberPhone, data, role];
-  const { rows } = await pool.query<User>(query, values);
+): Promise<User | null> {
+  await query(
+    "INSERT INTO users (email, hash_password, login, number_phone, data, role) VALUES ($1, $2, $3, $4, $5, $6)",
+    [email, hash_password, login, numberPhone, data, role],
+  );
+
+  const { rows } = await query<User>(
+    `SELECT id, email, login, number_phone as "numberPhone", data, role, last_online, confirmed, created_at
+     FROM users
+     WHERE login = $1`,
+    [login],
+  );
 
   return rows[0] ?? null;
 }
 
-export async function getUser(login: string) {
-  const query = "SELECT * FROM users WHERE login = $1";
-  const values = [login];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+export async function getUserForAuth(
+  login: string,
+): Promise<UserWithPassword | null> {
+  const { rows } = await query<UserWithPassword>(
+    `SELECT id, email, login, number_phone as "numberPhone", data, role, last_online, confirmed, created_at, hash_password
+     FROM users
+     WHERE login = $1`,
+    [login],
+  );
+  return rows[0] ?? null;
+}
+
+export async function getUserById(userId: number): Promise<User | null> {
+  const { rows } = await query<User>(
+    `SELECT id, email, login, number_phone as "numberPhone", data, role, last_online, confirmed, created_at
+     FROM users
+     WHERE id = $1`,
+    [userId],
+  );
+  return rows[0] ?? null;
 }
 
 export async function setUserOnline(userId: number) {
-  const now = new Date();
-  const query = "UPDATE users SET last_online = $1 WHERE id = $2";
-  const values = [now, userId];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  const now = new Date().toISOString();
+  await query("UPDATE users SET last_online = $1 WHERE id = $2", [
+    now,
+    userId,
+  ]);
+  const { rows } = await query<User>(
+    `SELECT id, email, login, number_phone as "numberPhone", data, role, last_online, confirmed, created_at
+     FROM users
+     WHERE id = $1`,
+    [userId],
+  );
+  return rows[0] ?? null;
 }
 
 export async function getStatus(userId: number) {
-  const query = "SELECT last_online FROM users WHERE id = $1";
-  const values = [userId];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  const { rows } = await query<{ last_online: string }>(
+    "SELECT last_online FROM users WHERE id = $1",
+    [userId],
+  );
+  return rows[0] ?? null;
 }
 
 export async function confirmedUser(userId: number) {
-  const query = "UPDATE users SET confirmed = true WHERE id = $1";
-  const values = [userId];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+  await query("UPDATE users SET confirmed = TRUE WHERE id = $1", [userId]);
+  const { rows } = await query<User>(
+    `SELECT id, email, login, number_phone as "numberPhone", data, role, last_online, confirmed, created_at
+     FROM users
+     WHERE id = $1`,
+    [userId],
+  );
+  return rows[0] ?? null;
 }

@@ -19,6 +19,10 @@ redis.on("error", (err: Error) => {
 
 export async function connectRedis() {
   if (!redis.isOpen) {
-    await redis.connect();
+    try {
+      await redis.connect();
+    } catch (err) {
+      console.error("Redis connection failed, continuing without Redis", err);
+    }
   }
 }

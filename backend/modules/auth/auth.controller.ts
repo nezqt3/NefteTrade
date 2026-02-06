@@ -1,7 +1,12 @@
-import { loginService, refreshService, registerService } from "./auth.service";
+import {
+  loginService,
+  logoutService,
+  refreshService,
+  registerService,
+} from "./auth.service";
 import { TypedRequest, TypedResponse } from "../../shared/http";
 import { AuthRequest, AuthResponse } from "./auth.types";
-import { sendEmailToAdmins } from "@modules/notifications/notifications.mail";
+import { sendEmailToAdmins } from "../../modules/notifications/notifications.mail";
 
 export class AuthController {
   static async authController(
@@ -59,6 +64,19 @@ export class AuthController {
         access_token: "",
         refresh_token: "",
       });
+    }
+  }
+
+  static async logoutController(
+    req: TypedRequest<{ refresh_token: string }>,
+    res: TypedResponse<{ message: string }>,
+  ) {
+    try {
+      const { refresh_token } = req.body;
+      const result = await logoutService(refresh_token);
+      res.json(result);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message || "Logout failed" });
     }
   }
 }

@@ -1,4 +1,5 @@
 import {
+  countListings,
   createListing,
   deleteListing,
   getListing,
@@ -8,11 +9,15 @@ import {
 import { Listing, ListingsFilter } from "./listings.types";
 
 export async function getListingsService(filter: ListingsFilter) {
-  const listings = await getListings(filter);
+  const [listings, total] = await Promise.all([
+    getListings(filter),
+    countListings(filter),
+  ]);
 
   return {
     success: true,
     listings,
+    total,
     meta: {
       limit: filter.limit,
       offset: filter.offset,
@@ -34,11 +39,11 @@ export async function getOneOfListingsService(listingId: string) {
 
 export async function createListingService(body: Listing) {
   try {
-    await createListing(body);
-
     if (!body.ownerId) {
       throw new Error("Owner ID is required");
     }
+
+    await createListing(body);
 
     return {
       success: true,

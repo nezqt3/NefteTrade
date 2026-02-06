@@ -22,6 +22,18 @@ export async function getListingsController(
   res.json(result);
 }
 
+export async function getMyListingsController(
+  req: TypedRequest<{}>,
+  res: TypedResponse<any>,
+) {
+  const userId = req.user?.userId;
+  if (!userId) return res.status(401).json({ message: "Unauthorized" });
+  const filter = buildListingsFilter(req.query);
+  filter.ownerId = String(userId);
+  const result = await getListingsService(filter);
+  res.json(result);
+}
+
 export async function getOneOfListingsController(
   req: TypedRequestParams<{ id: string }>,
   res: TypedResponse<any>,
@@ -53,7 +65,11 @@ export async function createListingsController(
   req: TypedRequest<Listing>,
   res: TypedResponse<any>,
 ) {
-  const { success, error } = await createListingService(req.body);
+  const payload = { ...req.body };
+  if (!payload.ownerId && req.user?.userId) {
+    payload.ownerId = String(req.user.userId);
+  }
+  const { success, error } = await createListingService(payload);
 
   if (!success) {
     return res.status(500).json({ error });
@@ -66,7 +82,11 @@ export async function updateListingsController(
   req: TypedRequest<Listing>,
   res: TypedResponse<any>,
 ) {
-  const { success, error } = await updateListingService(req.body);
+  const payload = { ...req.body };
+  if (!payload.id && (req as any).params?.id) {
+    payload.id = (req as any).params.id;
+  }
+  const { success, error } = await updateListingService(payload);
 
   if (!success) {
     return res.status(500).json({ error });
@@ -90,6 +110,7 @@ export async function deleteListingsController(
     }
 
     await deleteListingService(listingId);
+    return res.status(200).json({ message: "Listing deleted successfully" });
   } catch (error: any) {
     res.status(500).json({
       success: false,

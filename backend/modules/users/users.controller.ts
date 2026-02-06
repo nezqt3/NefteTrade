@@ -1,4 +1,4 @@
-import { sendUserConfirmedEmail } from "@modules/notifications/notifications.mail";
+import { sendUserConfirmedEmail } from "../../modules/notifications/notifications.mail";
 import { TypedRequest, TypedResponse } from "../../shared/http";
 import {
   confirmedUserService,

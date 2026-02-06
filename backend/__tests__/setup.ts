@@ -12,7 +12,7 @@ jest.mock("../config/redis", () => ({
 }));
 
 jest.mock("../modules/users/users.repository", () => ({
-  getUser: jest.fn(),
+  getUserForAuth: jest.fn(),
   createUser: jest.fn(),
 }));
 

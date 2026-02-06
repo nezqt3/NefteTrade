@@ -1,19 +1,23 @@
 import { loginService } from "../../modules/auth/auth.service";
-import { getUser } from "../../modules/users/users.repository";
+import { getUserForAuth } from "../../modules/users/users.repository";
 import { redis } from "../../config/redis";
 import * as hash from "../../utils/hash";
 import { comparePasswords } from "../../utils/hash";
-import { getUserMock } from "__mocks__/users";
-import { redisMocks } from "__mocks__/redis";
 
 jest.spyOn(hash, "comparePasswords");
 
 describe("loginService", () => {
   it("logs in user", async () => {
-    (getUser as jest.Mock).mockResolvedValue({
+    (getUserForAuth as jest.Mock).mockResolvedValue({
       id: 1,
       login: "admin",
-      password: "hashed",
+      email: "admin@test.com",
+      numberPhone: "123",
+      data: "data",
+      role: "admin",
+      last_online: new Date().toISOString(),
+      confirmed: true,
+      hash_password: "hashed",
     });
 
     (hash.comparePasswords as jest.Mock).mockResolvedValue(true);
@@ -29,7 +33,7 @@ describe("loginService", () => {
   });
 
   it("throws error if user not found", async () => {
-    (getUser as jest.Mock).mockResolvedValue(null);
+    (getUserForAuth as jest.Mock).mockResolvedValue(null);
 
     await expect(
       loginService({
@@ -40,11 +44,16 @@ describe("loginService", () => {
   });
 
   it("throws error if password is invalid", async () => {
-    (getUser as jest.Mock).mockResolvedValue({
+    (getUserForAuth as jest.Mock).mockResolvedValue({
       id: 1,
       login: "admin",
-      password: "hashed",
+      email: "admin@test.com",
+      numberPhone: "123",
+      data: "data",
       role: "admin",
+      last_online: new Date().toISOString(),
+      confirmed: true,
+      hash_password: "hashed",
     });
 
     (comparePasswords as jest.Mock).mockResolvedValue(false);
@@ -58,7 +67,7 @@ describe("loginService", () => {
   });
 
   it("throws error if getUser throws", async () => {
-    (getUser as jest.Mock).mockRejectedValue(new Error("DB error"));
+    (getUserForAuth as jest.Mock).mockRejectedValue(new Error("DB error"));
 
     await expect(
       loginService({
@@ -69,11 +78,16 @@ describe("loginService", () => {
   });
 
   it("throws error if comparePasswords throws", async () => {
-    (getUser as jest.Mock).mockResolvedValue({
+    (getUserForAuth as jest.Mock).mockResolvedValue({
       id: 1,
       login: "admin",
-      password: "hashed",
+      email: "admin@test.com",
+      numberPhone: "123",
+      data: "data",
       role: "admin",
+      last_online: new Date().toISOString(),
+      confirmed: true,
+      hash_password: "hashed",
     });
 
     (comparePasswords as jest.Mock).mockRejectedValue(new Error("Hash error"));
@@ -87,11 +101,16 @@ describe("loginService", () => {
   });
 
   it("throws error if redis.set fails", async () => {
-    (getUser as jest.Mock).mockResolvedValue({
+    (getUserForAuth as jest.Mock).mockResolvedValue({
       id: 1,
       login: "admin",
-      password: "hashed",
+      email: "admin@test.com",
+      numberPhone: "123",
+      data: "data",
       role: "admin",
+      last_online: new Date().toISOString(),
+      confirmed: true,
+      hash_password: "hashed",
     });
 
     (comparePasswords as jest.Mock).mockResolvedValue(true);

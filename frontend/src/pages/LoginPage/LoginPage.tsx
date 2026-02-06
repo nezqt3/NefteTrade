@@ -16,6 +16,10 @@ export const LoginPage: React.FC = () => {
     mutationFn: (data: LoginDto) => authApi.login(data),
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken);
+      }
+      localStorage.setItem('userId', data.user.id);
       setUser(data.user);
       message.success('Вход выполнен успешно!');
       navigate('/');

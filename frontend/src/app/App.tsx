@@ -28,6 +28,8 @@ export const App: React.FC = () => {
           setUser(user);
         } catch (error) {
           localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('userId');
           setUser(null);
         }
       } else {

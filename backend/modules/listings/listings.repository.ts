@@ -1,10 +1,9 @@
-import { pool } from "../../config/database";
+import { dbProvider, query } from "../../config/database";
 import { Listing, ListingsFilter } from "./listings.types";
 
-export async function getListings(filter: ListingsFilter) {
+function buildWhere(filter: ListingsFilter) {
   const conditions: string[] = [];
   const values: any[] = [];
-
   let i = 1;
 
   if (filter.productType) {
@@ -27,6 +26,16 @@ export async function getListings(filter: ListingsFilter) {
     values.push(filter.price.lte);
   }
 
+  if (filter.quantity?.gte !== undefined) {
+    conditions.push(`quantity >= $${i++}`);
+    values.push(filter.quantity.gte);
+  }
+
+  if (filter.quantity?.lte !== undefined) {
+    conditions.push(`quantity <= $${i++}`);
+    values.push(filter.quantity.lte);
+  }
+
   if (filter.createdAt?.gte) {
     conditions.push(`created_at >= $${i++}`);
     values.push(filter.createdAt.gte);
@@ -37,35 +46,87 @@ export async function getListings(filter: ListingsFilter) {
     values.push(filter.createdAt.lte);
   }
 
+  if (filter.loadAddress) {
+    if (dbProvider === "postgres") {
+      conditions.push(`load_address ILIKE $${i++}`);
+      values.push(`%${filter.loadAddress}%`);
+    } else {
+      conditions.push(`LOWER(load_address) LIKE $${i++}`);
+      values.push(`%${filter.loadAddress.toLowerCase()}%`);
+    }
+  }
+
+  if (filter.unloadAddress) {
+    if (dbProvider === "postgres") {
+      conditions.push(`unload_address ILIKE $${i++}`);
+      values.push(`%${filter.unloadAddress}%`);
+    } else {
+      conditions.push(`LOWER(unload_address) LIKE $${i++}`);
+      values.push(`%${filter.unloadAddress.toLowerCase()}%`);
+    }
+  }
+
+  if (filter.loadingMethod) {
+    conditions.push(`loading_method = $${i++}`);
+    values.push(filter.loadingMethod);
+  }
+
+  if (filter.pumpRequired !== undefined) {
+    conditions.push(`pump_required = $${i++}`);
+    values.push(filter.pumpRequired);
+  }
+
+  if (filter.ownerId) {
+    conditions.push(`owner_id = $${i++}`);
+    values.push(filter.ownerId);
+  }
+
   const where =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-  const query = `
+  return { where, values, nextIndex: i };
+}
+
+export async function getListings(filter: ListingsFilter) {
+  const { where, values, nextIndex } = buildWhere(filter);
+
+  const sql = `
     SELECT *
     FROM listings
     ${where}
     ORDER BY created_at DESC
-    LIMIT $${i++}
-    OFFSET $${i++}
+    LIMIT $${nextIndex}
+    OFFSET $${nextIndex + 1}
   `;
 
   values.push(filter.limit, filter.offset);
 
-  const result = await pool.query(query, values);
+  const result = await query(sql, values);
   return result.rows;
 }
 
+export async function countListings(filter: ListingsFilter) {
+  const { where, values } = buildWhere(filter);
+  const queryText = `
+    SELECT COUNT(*) as count
+    FROM listings
+    ${where}
+  `;
+  const result = await query<{ count: number }>(queryText, values);
+  return Number(result.rows[0]?.count ?? 0);
+}
+
 export async function getListing(listingId: string) {
-  const query = "SELECT * FROM listings WHERE id = $1";
+  const sql = "SELECT * FROM listings WHERE id = $1";
   const value = [listingId];
-  const result = await pool.query(query, value);
+  const result = await query(sql, value);
   return result.rows[0];
 }
 
 export async function createListing(listing: Listing): Promise<void> {
-  const query =
+  const sql =
     "INSERT INTO listings (owner_id, load_address, unload_address, product_type, quantity, loading_method, pump_required, price, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)";
-  await pool.query(query, [
+  await query(sql, [
     listing.ownerId,
     listing.loadAddress,
     listing.unloadAddress,
@@ -129,17 +190,17 @@ export async function updateListing(
     return;
   }
 
-  const query = `
+  const sql = `
     UPDATE listings
     SET ${fields.join(", ")}
     WHERE id = $${i}
   `;
   values.push(listing.id);
 
-  await pool.query(query, values);
+  await query(sql, values);
 }
 
 export async function deleteListing(listingId: string): Promise<void> {
-  const query = "DELETE FROM listings WHERE id = $1";
-  await pool.query(query, [listingId]);
+  const sql = "DELETE FROM listings WHERE id = $1";
+  await query(sql, [listingId]);
 }

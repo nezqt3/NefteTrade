@@ -17,6 +17,10 @@ export const RegisterPage: React.FC = () => {
     mutationFn: (data: RegisterDto) => authApi.register(data),
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken);
+      }
+      localStorage.setItem('userId', data.user.id);
       setUser(data.user);
       message.success('Регистрация успешна!');
       navigate('/');

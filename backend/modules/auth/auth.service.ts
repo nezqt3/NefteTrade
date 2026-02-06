@@ -1,7 +1,6 @@
-import { createUser, getUser } from "../users/users.repository";
+import { createUser, getUserForAuth } from "../users/users.repository";
 import { AuthRequest, AuthResponse } from "./auth.types";
 import { generateAccessToken } from "../../utils/jwt";
-import { redis } from "config/redis";
 import { comparePasswords, hashPassword } from "../../utils/hash";
 import {
   revokeRefreshToken,
@@ -11,13 +10,13 @@ import {
 import { generateSecretOfRefreshToken } from "../../utils/jwt";
 
 export async function loginService(data: AuthRequest): Promise<AuthResponse> {
-  const user = await getUser(data.login);
+  const user = await getUserForAuth(data.login);
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  if (!(await comparePasswords(data.password, user.password))) {
+  if (!(await comparePasswords(data.password, user.hash_password))) {
     throw new Error("Invalid password");
   }
 
@@ -33,7 +32,16 @@ export async function loginService(data: AuthRequest): Promise<AuthResponse> {
   return {
     access_token: accessToken,
     refresh_token: refreshTokenId,
-    user: user,
+    user: {
+      id: user.id,
+      email: user.email,
+      login: user.login,
+      numberPhone: user.numberPhone,
+      data: user.data,
+      role: user.role,
+      last_online: user.last_online,
+      confirmed: user.confirmed,
+    },
   };
 }
 

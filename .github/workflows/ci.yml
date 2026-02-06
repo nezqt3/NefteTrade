@@ -21,7 +21,6 @@ jobs:
         with:
           node-version: 20
 
-      # 3. Устанавливаем зависимости
       - name: Install dependencies
         run: npm ci
 
@@ -29,7 +28,7 @@ jobs:
         run: npm test
 
       - name: Push changes
-        if: success() # <- выполняется только если предыдущий шаг успешен
+        if: success()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"

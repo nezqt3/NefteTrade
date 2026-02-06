@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AuthController } from "./auth.controller";
 import { authMiddleware, roleMiddleware } from "./auth.middleware";
-import { revokeRefreshToken } from "../../redis/cache";
+import { getUserById } from "../users/users.repository";
 
 const router = Router();
 
@@ -51,7 +51,7 @@ const router = Router();
  *       400:
  *         description: Ошибка валидации или неверный логин/пароль
  */
-router.get("/login", AuthController.authController);
+router.post("/login", AuthController.authController);
 
 /**
  * @swagger
@@ -123,7 +123,7 @@ router.get("/login", AuthController.authController);
  *       400:
  *         description: Ошибка валидации или не удалось создать пользователя
  */
-router.get("/register", AuthController.registerController);
+router.post("/register", AuthController.registerController);
 
 /**
  * @swagger
@@ -151,7 +151,7 @@ router.get("/register", AuthController.registerController);
  *                   type: string
  *                   example: Logged out successfully
  */
-router.get("/logout", revokeRefreshToken);
+router.post("/logout", AuthController.logoutController);
 
 /**
  * @swagger
@@ -184,8 +184,12 @@ router.get("/logout", revokeRefreshToken);
  *       401:
  *         description: Неавторизованный пользователь
  */
-router.get("/me", authMiddleware, (req, res) => {
-  res.json({ user: req.user });
+router.get("/me", authMiddleware, async (req, res) => {
+  const userId = req.user?.userId;
+  if (!userId) return res.status(401).json({ message: "Unauthorized" });
+  const user = await getUserById(userId);
+  if (!user) return res.status(404).json({ message: "User not found" });
+  res.json({ user });
 });
 
 /**

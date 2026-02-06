@@ -9,4 +9,5 @@ export interface User {
   role: Role;
   last_online: string;
   confirmed: boolean;
+  created_at?: string;
 }

@@ -3,11 +3,12 @@ import {
   createListingsController,
   deleteListingsController,
   getListingsController,
+  getMyListingsController,
   getOneOfListingsController,
   updateListingsController,
 } from "./listings.controller";
-import { authMiddleware } from "@modules/auth/auth.middleware";
-import { requireRole } from "./listings.permissions";
+import { authMiddleware } from "../../modules/auth/auth.middleware";
+import { requireAnyRole, requireRole } from "./listings.permissions";
 
 const router = Router();
 
@@ -53,6 +54,7 @@ const router = Router();
  *                 $ref: '#/components/schemas/Listing'
  */
 router.get("/", getListingsController);
+router.get("/my", authMiddleware, getMyListingsController);
 
 /**
  * @swagger
@@ -193,7 +195,12 @@ router.get("/:id", getOneOfListingsController);
  *                   type: string
  *                   example: Internal server error
  */
-router.post("/", requireRole("contractor"), createListingsController);
+router.post(
+  "/",
+  authMiddleware,
+  requireRole("contractor"),
+  createListingsController,
+);
 
 /**
  * @swagger
@@ -260,8 +267,8 @@ router.post("/", requireRole("contractor"), createListingsController);
 
 router.patch(
   "/:id",
-  requireRole("contractor"),
-  requireRole("admin"),
+  authMiddleware,
+  requireAnyRole(["contractor", "admin"]),
   updateListingsController,
 );
 
@@ -323,8 +330,8 @@ router.patch(
  */
 router.delete(
   "/:id",
-  requireRole("contractor"),
-  requireRole("admin"),
+  authMiddleware,
+  requireAnyRole(["contractor", "admin"]),
   deleteListingsController,
 );
 

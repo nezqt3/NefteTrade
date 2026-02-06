@@ -4,8 +4,8 @@ import {
   getStatusController,
   setUserOnlineController,
 } from "./users.controller";
-import { authMiddleware } from "@modules/auth/auth.middleware";
-import { requireRole } from "@modules/listings/listings.permissions";
+import { authMiddleware } from "../../modules/auth/auth.middleware";
+import { requireRole } from "../../modules/listings/listings.permissions";
 
 const router = Router();
 

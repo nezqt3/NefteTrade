@@ -1,11 +1,11 @@
-import { pool } from "../../config/database";
+import { query } from "../../config/database";
 import { Message } from "./chat.types";
 
 export async function getMessages(chatId: number) {
   try {
-    const query = "SELECT * FROM messages WHERE chat_id = $1";
+    const sql = "SELECT * FROM messages WHERE chat_id = $1";
     const values = [chatId];
-    const result = await pool.query<Message[]>(query, values);
+    const result = await query<Message>(sql, values);
 
     return result.rows;
   } catch (error) {
@@ -16,7 +16,7 @@ export async function getMessages(chatId: number) {
 
 export async function sendMessage(message: Message) {
   try {
-    const query =
+    const sql =
       "INSERT INTO messages (chat_id, message, sender_id, created_at, read) VALUES ($1, $2, $3, $4, $5)";
     const values = [
       message.chatId,
@@ -25,7 +25,7 @@ export async function sendMessage(message: Message) {
       message.created_at,
       message.read,
     ];
-    await pool.query(query, values);
+    await query(sql, values);
   } catch (error) {
     console.error("Error sending message:", error);
     throw error;
@@ -34,9 +34,9 @@ export async function sendMessage(message: Message) {
 
 export async function markMessage(messageIds: number[]) {
   try {
-    const query = "UPDATE messages SET read = true WHERE id = ANY($1)";
+    const sql = "UPDATE messages SET read = true WHERE id = ANY($1)";
     const values = [messageIds];
-    await pool.query(query, values);
+    await query(sql, values);
   } catch (error) {
     console.error("Error marking message as read:", error);
     throw error;
