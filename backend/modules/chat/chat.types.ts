@@ -2,8 +2,8 @@ export interface Chat {
   id: number;
   listingId: number;
   senderId: number;
-  receiverId: string;
-  created_at: Date;
+  receiverId: number;
+  created_at: string;
 }
 
 export interface Message {

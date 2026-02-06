@@ -8,6 +8,7 @@ jest.mock("../config/redis", () => ({
     get: jest.fn(),
     set: jest.fn(),
     del: jest.fn(),
+    isOpen: true,
   },
 }));
 

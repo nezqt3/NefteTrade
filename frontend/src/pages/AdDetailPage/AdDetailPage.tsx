@@ -43,6 +43,7 @@ export const AdDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const [contactUnlocked, setContactUnlocked] = useState(false);
   const [unlockedPhone, setUnlockedPhone] = useState<string | null>(null);
+  const [chatId, setChatId] = useState<string | null>(null);
 
   const { data: ad, isLoading } = useQuery({
     queryKey: ['ad', id],
@@ -55,6 +56,9 @@ export const AdDetailPage: React.FC = () => {
     onSuccess: (data) => {
       setContactUnlocked(true);
       setUnlockedPhone(data.phone);
+      if (data.chatId) {
+        setChatId(String(data.chatId));
+      }
       message.success('Контакт успешно открыт!');
     },
     onError: () => {
@@ -238,7 +242,7 @@ export const AdDetailPage: React.FC = () => {
                 size="large"
                 icon={<MessageOutlined />}
                 block
-                onClick={() => navigate(`/messages/${id}`)}
+                onClick={() => navigate(`/messages/${chatId || id}`)}
               >
                 Открыть чат
               </Button>

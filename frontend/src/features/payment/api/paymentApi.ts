@@ -50,8 +50,12 @@ export const paymentApi = {
     return response.data.map(mapPayment);
   },
 
-  unlockContact: async (adId: string): Promise<{ phone: string }> => {
-    const response = await api.post<{ phone: string }>(`/payments/unlock/${adId}`);
+  unlockContact: async (
+    adId: string,
+  ): Promise<{ phone: string; chatId: number }> => {
+    const response = await api.post<{ phone: string; chatId: number }>(
+      `/payments/unlock/${adId}`,
+    );
     return response.data;
   },
 };

@@ -7,6 +7,9 @@ import { LoginPage } from '@pages/LoginPage/LoginPage';
 import { RegisterPage } from '@pages/RegisterPage/RegisterPage';
 import { AdsListPage } from '@pages/AdsListPage/AdsListPage';
 import { AdDetailPage } from '@pages/AdDetailPage/AdDetailPage';
+import { CreateAdPage } from '@pages/CreateAdPage/CreateAdPage';
+import { MyAdsPage } from '@pages/MyAdsPage/MyAdsPage';
+import { ChatPage } from '@pages/ChatPage/ChatPage';
 import { useAuthStore } from '@app/store/authStore';
 
 const { Footer } = Layout;
@@ -56,9 +59,7 @@ export const AppRouter: React.FC = () => {
                     path="/my-ads"
                     element={
                       <ProtectedRoute>
-                        <div style={{ padding: '50px', textAlign: 'center' }}>
-                          <h1>Мои объявления (в разработке)</h1>
-                        </div>
+                        <MyAdsPage />
                       </ProtectedRoute>
                     }
                   />
@@ -66,9 +67,7 @@ export const AppRouter: React.FC = () => {
                     path="/create-ad"
                     element={
                       <ProtectedRoute>
-                        <div style={{ padding: '50px', textAlign: 'center' }}>
-                          <h1>Создать объявление (в разработке)</h1>
-                        </div>
+                        <CreateAdPage />
                       </ProtectedRoute>
                     }
                   />
@@ -76,9 +75,7 @@ export const AppRouter: React.FC = () => {
                     path="/messages"
                     element={
                       <ProtectedRoute>
-                        <div style={{ padding: '50px', textAlign: 'center' }}>
-                          <h1>Сообщения (в разработке)</h1>
-                        </div>
+                        <ChatPage />
                       </ProtectedRoute>
                     }
                   />
@@ -86,9 +83,7 @@ export const AppRouter: React.FC = () => {
                     path="/messages/:id"
                     element={
                       <ProtectedRoute>
-                        <div style={{ padding: '50px', textAlign: 'center' }}>
-                          <h1>Чат (в разработке)</h1>
-                        </div>
+                        <ChatPage />
                       </ProtectedRoute>
                     }
                   />

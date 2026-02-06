@@ -30,7 +30,7 @@ export const HomePage: React.FC = () => {
         </Paragraph>
 
         <Space size="large">
-          {isAuthenticated && user?.role === UserRole.CUSTOMER ? (
+          {isAuthenticated && user?.role === UserRole.CONTRACTOR ? (
             <Button
               type="primary"
               size="large"
@@ -45,7 +45,7 @@ export const HomePage: React.FC = () => {
                 border: 'none',
               }}
             >
-              Создать заказ
+              Создать объявление
             </Button>
           ) : (
             <Button

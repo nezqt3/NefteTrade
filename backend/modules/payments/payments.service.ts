@@ -1,5 +1,6 @@
 import { getListing } from "../listings/listings.repository";
 import { getUserById } from "../users/users.repository";
+import { getOrCreateChat } from "../chat/chat.repository";
 import {
   createPayment,
   getPaymentById,
@@ -50,6 +51,8 @@ export class PaymentsService {
 
     await this.completePaymentForAd(adId, userId);
 
-    return { phone: owner.numberPhone };
+    const chat = await getOrCreateChat(adId, userId, ownerId);
+
+    return { phone: owner.numberPhone, chatId: chat.id };
   }
 }
