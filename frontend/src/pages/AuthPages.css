@@ -1,0 +1,130 @@
+/* Auth Pages */
+.tg-auth {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: var(--gradient-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.tg-auth::before,
+.tg-auth::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.tg-auth::before {
+  width: 420px;
+  height: 420px;
+  background: rgba(13, 148, 219, 0.35);
+  top: -140px;
+  right: -100px;
+}
+
+.tg-auth::after {
+  width: 360px;
+  height: 360px;
+  background: rgba(255, 107, 53, 0.26);
+  left: -120px;
+  bottom: -120px;
+}
+
+.tg-auth__card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 520px);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(13, 148, 219, 0.16);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: slideInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tg-auth__stripe {
+  height: 6px;
+  background: var(--gradient-primary);
+}
+
+.tg-auth__inner {
+  padding: clamp(28px, 7vw, 48px);
+}
+
+.tg-auth__logo {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(32px, 8vw, 40px);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.tg-auth__subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 22px;
+}
+
+.tg-auth__form {
+  display: grid;
+  gap: 12px;
+}
+
+.tg-auth__form .tg-btn {
+  min-height: 56px;
+  margin-top: 6px;
+}
+
+.tg-auth__footer {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.tg-auth__footer a {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+/* Role selector */
+.tg-role-selector {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.tg-role-selector__btn {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  padding: 12px;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  font-weight: 700;
+  color: var(--text-medium);
+  cursor: pointer;
+  transition: var(--transition-bounce);
+}
+
+.tg-role-selector__btn:hover {
+  border-color: var(--primary);
+  transform: translateY(-4px);
+}
+
+.tg-role-selector__btn--active {
+  color: #fff;
+  border-color: transparent;
+  background: var(--gradient-primary);
+  transform: scale(1.02);
+}
+
+.tg-role-selector__emoji {
+  width: 30px;
+  height: 30px;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Lock, MapPin, MessageSquare, Phone, Star, UserRound } from 'lucide-react';
 import {
   Layout,
   Card,
@@ -10,16 +11,8 @@ import {
   Descriptions,
   Modal,
   message,
-  Rate,
   Spin,
 } from 'antd';
-import {
-  EnvironmentOutlined,
-  PhoneOutlined,
-  UserOutlined,
-  LockOutlined,
-  MessageOutlined,
-} from '@ant-design/icons';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { adsApi } from '@features/ads/api/adsApi';
 import { paymentApi } from '@features/payment/api/paymentApi';
@@ -102,8 +95,9 @@ export const AdDetailPage: React.FC = () => {
           <Button
             onClick={() => navigate(-1)}
             style={{ marginBottom: '24px' }}
+            icon={<ArrowLeft size={16} strokeWidth={2.3} />}
           >
-            ← Назад
+            Назад
           </Button>
 
           <Card
@@ -141,7 +135,7 @@ export const AdDetailPage: React.FC = () => {
               <Space direction="vertical" size="large" style={{ width: '100%' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                    <EnvironmentOutlined style={{ fontSize: '20px', color: '#52c41a' }} />
+                    <MapPin size={20} strokeWidth={2.3} style={{ color: '#52c41a' }} />
                     <Title level={5} style={{ margin: 0 }}>Погрузка</Title>
                   </div>
                   <Text style={{ fontSize: '16px', marginLeft: '32px' }}>
@@ -151,7 +145,7 @@ export const AdDetailPage: React.FC = () => {
 
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                    <EnvironmentOutlined style={{ fontSize: '20px', color: '#ff4d4f' }} />
+                    <MapPin size={20} strokeWidth={2.3} style={{ color: '#ff4d4f' }} />
                     <Title level={5} style={{ margin: 0 }}>Разгрузка</Title>
                   </div>
                   <Text style={{ fontSize: '16px', marginLeft: '32px' }}>
@@ -188,7 +182,7 @@ export const AdDetailPage: React.FC = () => {
             <Card
               title={
                 <Space>
-                  <UserOutlined />
+                  <UserRound size={18} strokeWidth={2.3} />
                   <span>Информация о заказчике</span>
                 </Space>
               }
@@ -201,7 +195,10 @@ export const AdDetailPage: React.FC = () => {
                       {ad.user?.name || 'Заказчик'}
                     </Text>
                     {ad.user?.rating && (
-                      <Rate disabled defaultValue={ad.user.rating} style={{ fontSize: '16px' }} />
+                      <Space size={4}>
+                        <Star size={14} strokeWidth={2.3} style={{ color: '#f5a524' }} />
+                        <Text style={{ color: '#718096' }}>{ad.user.rating.toFixed(1)}</Text>
+                      </Space>
                     )}
                   </Space>
                 </div>
@@ -209,7 +206,7 @@ export const AdDetailPage: React.FC = () => {
                 {contactUnlocked && unlockedPhone ? (
                   <div>
                     <Space>
-                      <PhoneOutlined style={{ color: '#0d94db' }} />
+                      <Phone size={16} strokeWidth={2.3} style={{ color: '#0d94db' }} />
                       <Text strong style={{ fontSize: '16px' }}>
                         {unlockedPhone}
                       </Text>
@@ -217,14 +214,14 @@ export const AdDetailPage: React.FC = () => {
                   </div>
                 ) : (
                   <div style={{ textAlign: 'center', padding: '24px', background: '#f9fafb', borderRadius: '8px' }}>
-                    <LockOutlined style={{ fontSize: '48px', color: '#acacb4', marginBottom: '16px' }} />
+                    <Lock size={48} strokeWidth={2.2} style={{ color: '#acacb4', marginBottom: '16px' }} />
                     <Paragraph type="secondary">
                       Номер телефона скрыт. Для доступа к контактам необходимо оплатить 500 ₽
                     </Paragraph>
                     <Button
                       type="primary"
                       size="large"
-                      icon={<PhoneOutlined />}
+                      icon={<Phone size={16} strokeWidth={2.3} />}
                       onClick={handleUnlockContact}
                       loading={unlockMutation.isPending}
                     >
@@ -240,7 +237,7 @@ export const AdDetailPage: React.FC = () => {
               <Button
                 type="primary"
                 size="large"
-                icon={<MessageOutlined />}
+                icon={<MessageSquare size={16} strokeWidth={2.3} />}
                 block
                 onClick={() => navigate(`/messages/${chatId || id}`)}
               >

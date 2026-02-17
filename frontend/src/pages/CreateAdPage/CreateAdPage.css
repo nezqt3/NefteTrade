@@ -1,0 +1,115 @@
+/* Create Ad */
+.tg-create__form-card {
+  max-width: 940px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(22px, 5vw, 36px);
+}
+
+.tg-create__stripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--gradient-primary);
+}
+
+.tg-create__header {
+  margin-bottom: 20px;
+}
+
+.tg-create__header h1 {
+  font-size: clamp(34px, 6vw, 52px);
+}
+
+.tg-create__header p {
+  color: var(--text-medium);
+}
+
+.tg-create__form {
+  display: grid;
+  gap: 18px;
+}
+
+.tg-create__section {
+  border: 1px solid rgba(13, 148, 219, 0.1);
+  border-radius: var(--radius-md);
+  padding: clamp(16px, 3vw, 22px);
+  background: linear-gradient(150deg, rgba(13, 148, 219, 0.05), rgba(255, 255, 255, 0.9));
+}
+
+.tg-create__section h2 {
+  font-size: clamp(26px, 4vw, 34px);
+  margin-bottom: 12px;
+}
+
+.tg-create__section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tg-create__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.tg-create__success {
+  max-width: 740px;
+  margin: 0 auto;
+  text-align: center;
+  padding: clamp(24px, 6vw, 40px);
+  background: linear-gradient(140deg, rgba(82, 196, 26, 0.12), rgba(255, 255, 255, 0.94));
+  border: 2px solid rgba(82, 196, 26, 0.44);
+}
+
+.tg-create__check {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--gradient-success);
+  color: #fff;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: checkScale 0.5s ease;
+}
+
+.tg-create__check-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.tg-create__success h2 {
+  font-size: clamp(32px, 5vw, 44px);
+  margin-bottom: 8px;
+}
+
+.tg-create__success p {
+  color: var(--text-medium);
+  margin-bottom: 14px;
+}
+
+.tg-create__restricted {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  padding: clamp(24px, 4vw, 36px);
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .tg-create__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tg-create__grid--route {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

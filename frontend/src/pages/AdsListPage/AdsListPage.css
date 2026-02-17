@@ -1,0 +1,53 @@
+/* Ads Page */
+.tg-ads__header {
+  margin-bottom: 20px;
+}
+
+.tg-ads__header h1 {
+  font-size: clamp(34px, 6vw, 52px);
+  margin-bottom: 8px;
+}
+
+.tg-ads__header p {
+  color: var(--text-medium);
+  max-width: 760px;
+}
+
+.tg-ads__count {
+  margin: 14px 0 16px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.tg-ads__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: clamp(16px, 3vw, 28px);
+}
+
+.tg-ads__loading,
+.tg-ads__loader,
+.tg-ads__end {
+  text-align: center;
+  padding: 24px 0;
+  color: var(--text-light);
+}
+
+.tg-ads__empty {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(13, 148, 219, 0.1);
+  padding: 36px 20px;
+}
+
+@media (max-width: 1200px) {
+  .tg-ads__grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .tg-ads__grid {
+    grid-template-columns: 1fr;
+  }
+}

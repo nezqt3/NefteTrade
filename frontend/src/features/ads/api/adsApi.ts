@@ -107,7 +107,7 @@ function mapListingToAd(listing: BackendListing): Ad {
     quantity: listing.quantity ?? 0,
     loadingMethod:
       loadingMethodRaw === 'bottom' ? LoadingMethod.BOTTOM : LoadingMethod.TOP,
-    needsPump: pumpRaw === true || pumpRaw === 1 || pumpRaw === '1',
+    needsPump: pumpRaw === true || pumpRaw === 1 || String(pumpRaw) === '1',
     price: listing.price ?? 0,
     priceType: 'total',
     description: undefined,

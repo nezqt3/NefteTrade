@@ -1,0 +1,378 @@
+/* About Page */
+.tg-about {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 28px;
+}
+
+/* Hero */
+.tg-about__hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-dark);
+  padding: clamp(74px, 12vw, 140px) 0 clamp(62px, 8vw, 96px);
+}
+
+.tg-about__hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cpath d='M64 0H0V64' fill='none' stroke='white' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+.tg-about__hero-glow {
+  position: absolute;
+  right: 2%;
+  top: 4%;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13, 148, 219, 0.48) 0%, rgba(13, 148, 219, 0) 72%);
+  filter: blur(80px);
+  animation: heroGlow 10s infinite;
+}
+
+.tg-about__hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 900px;
+  display: grid;
+  gap: 16px;
+}
+
+.tg-about__hero-kicker {
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tg-about__title {
+  font-size: clamp(38px, 8vw, 64px);
+  color: #fff;
+  line-height: 1.08;
+}
+
+.tg-about__subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(18px, 3vw, 22px);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.tg-about__hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tg-about__hero-tags span {
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+/* Shared Sections */
+.tg-about__section {
+  padding: clamp(34px, 6vw, 72px) 0;
+}
+
+.tg-about__section-title {
+  text-align: center;
+  font-size: clamp(34px, 6vw, 52px);
+  margin-bottom: clamp(20px, 4vw, 34px);
+}
+
+/* History */
+.tg-about__section--history {
+  margin-top: -36px;
+  position: relative;
+  z-index: 2;
+}
+
+.tg-about__history-shell {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(13, 148, 219, 0.16);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-lg);
+  padding: clamp(22px, 5vw, 42px);
+  display: grid;
+  gap: clamp(18px, 4vw, 28px);
+}
+
+.tg-about__history-intro {
+  display: grid;
+  gap: 12px;
+}
+
+.tg-about__history-intro h2 {
+  font-size: clamp(32px, 5vw, 46px);
+}
+
+.tg-about__history-intro p {
+  color: var(--text-medium);
+}
+
+.tg-about__history-stats {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tg-about__history-stat {
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  border: 1px solid rgba(13, 148, 219, 0.14);
+  background: linear-gradient(135deg, rgba(13, 148, 219, 0.08), rgba(255, 255, 255, 0.95));
+}
+
+.tg-about__history-stat strong {
+  display: block;
+  font-size: clamp(28px, 5vw, 38px);
+  line-height: 1;
+}
+
+.tg-about__history-stat span {
+  margin-top: 6px;
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.tg-about__timeline {
+  display: grid;
+  gap: 10px;
+}
+
+.tg-about__timeline-item {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(13, 148, 219, 0.12);
+  background: linear-gradient(145deg, rgba(13, 148, 219, 0.07), rgba(255, 255, 255, 0.96));
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  transition: var(--transition-normal);
+}
+
+.tg-about__timeline-item:hover {
+  transform: translateY(-5px);
+  border-color: rgba(13, 148, 219, 0.3);
+  box-shadow: var(--shadow-sm);
+}
+
+.tg-about__timeline-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  color: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+}
+
+.tg-about__timeline-year {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+}
+
+.tg-about__timeline-item h3 {
+  font-size: 26px;
+  margin: 2px 0 5px;
+}
+
+.tg-about__timeline-item p {
+  color: var(--text-medium);
+}
+
+/* Values */
+.tg-about__values {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 3vw, 24px);
+}
+
+.tg-about__value-card {
+  position: relative;
+  padding: clamp(20px, 4vw, 28px);
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(13, 148, 219, 0.1);
+  background: linear-gradient(160deg, rgba(13, 148, 219, 0.06), rgba(117, 192, 227, 0.04));
+  transition: var(--transition-normal);
+}
+
+.tg-about__value-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(13, 148, 219, 0.35);
+  box-shadow: var(--shadow-md);
+}
+
+.tg-about__value-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-bounce);
+}
+
+.tg-about__value-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.tg-about__value-card:hover .tg-about__value-icon {
+  transform: scale(1.15) rotate(-10deg);
+}
+
+.tg-about__value-card h3 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.tg-about__value-card p {
+  color: var(--text-medium);
+}
+
+/* Team */
+.tg-about__team {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 3vw, 20px);
+}
+
+.tg-about__member {
+  padding: 22px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(13, 148, 219, 0.12);
+  text-align: center;
+  transition: var(--transition-normal);
+}
+
+.tg-about__member:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-sm);
+}
+
+.tg-about__avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: 24px;
+  margin: 0 auto 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  color: #fff;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-bounce);
+}
+
+.tg-about__member:hover .tg-about__avatar {
+  transform: rotate(-5deg) scale(1.08);
+}
+
+.tg-about__member h3 {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.tg-about__member p {
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* Contacts */
+.tg-about__section--contacts {
+  padding-bottom: 0;
+}
+
+.tg-about__contacts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: clamp(18px, 4vw, 28px);
+  border: 1px solid rgba(13, 148, 219, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-sm);
+}
+
+.tg-about__contact-item {
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(140deg, rgba(13, 148, 219, 0.08), rgba(255, 255, 255, 0.96));
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.tg-about__contact-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  color: #fff;
+  background: var(--gradient-primary);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tg-about__contact-item h3 {
+  font-size: 22px;
+  margin-bottom: 3px;
+}
+
+.tg-about__contact-item p {
+  color: var(--text-medium);
+}
+
+@media (min-width: 992px) {
+  .tg-about__history-shell {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .tg-about__values {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .tg-about__contacts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .tg-about__history-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .tg-about__team {
+    grid-template-columns: 1fr;
+  }
+}

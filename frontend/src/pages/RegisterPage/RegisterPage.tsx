@@ -1,20 +1,26 @@
-import React from 'react';
-import { Form, Input, Button, Card, Typography, message, Radio } from 'antd';
-import { UserOutlined, LockOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { authApi, RegisterDto } from '@features/auth/api/authApi';
+import { ClipboardList, Truck } from 'lucide-react';
+import { authApi } from '@features/auth/api/authApi';
 import { useAuthStore } from '@app/store/authStore';
 import { UserRole } from '@entities/user/model/types';
-
-const { Title, Text } = Typography;
+import '../AuthPages.css';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const setUser = useAuthStore((state) => state.setUser);
 
+  const [role, setRole] = useState<UserRole>(UserRole.CUSTOMER);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const registerMutation = useMutation({
-    mutationFn: (data: RegisterDto) => authApi.register(data),
+    mutationFn: () => authApi.register({ email, password, name, phone, role }),
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       if (data.refreshToken) {
@@ -22,158 +28,116 @@ export const RegisterPage: React.FC = () => {
       }
       localStorage.setItem('userId', data.user.id);
       setUser(data.user);
-      message.success('Регистрация успешна!');
+      message.success('Регистрация успешна');
       navigate('/');
     },
-    onError: (error: any) => {
-      message.error(error.response?.data?.message || 'Ошибка регистрации');
+    onError: () => {
+      message.error('Ошибка регистрации');
     },
   });
 
-  const handleSubmit = (values: RegisterDto) => {
-    registerMutation.mutate(values);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!name || !email || !phone || !password || !confirmPassword) {
+      message.error('Заполните все поля');
+      return;
+    }
+
+    if (password.length < 8) {
+      message.error('Пароль должен содержать минимум 8 символов');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      message.error('Пароли не совпадают');
+      return;
+    }
+
+    registerMutation.mutate();
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #e4eaec 0%, #75c0e3 100%)',
-        padding: '20px',
-      }}
-    >
-      <Card
-        style={{
-          width: '100%',
-          maxWidth: '520px',
-          borderRadius: '16px',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-        }}
-      >
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <Title level={2} style={{ color: '#0d94db', marginBottom: '8px' }}>
-            Регистрация
-          </Title>
-          <Text type="secondary">Создайте новый аккаунт</Text>
+    <main className="tg-auth tg-page-animate">
+      <section className="tg-auth__card">
+        <div className="tg-auth__stripe" aria-hidden="true" />
+        <div className="tg-auth__inner">
+          <h1 className="tg-auth__logo tg-gradient-text">ТрансГарант</h1>
+          <p className="tg-auth__subtitle">Создайте новый аккаунт</p>
+
+          <form className="tg-auth__form" onSubmit={handleSubmit}>
+            <div className="tg-role-selector" role="group" aria-label="Выбор роли">
+              <button
+                className={`tg-role-selector__btn ${role === UserRole.CUSTOMER ? 'tg-role-selector__btn--active' : ''}`}
+                type="button"
+                onClick={() => setRole(UserRole.CUSTOMER)}
+              >
+                <ClipboardList className="tg-role-selector__emoji" size={30} strokeWidth={2.2} aria-hidden="true" />
+                Заказчик
+              </button>
+              <button
+                className={`tg-role-selector__btn ${role === UserRole.CONTRACTOR ? 'tg-role-selector__btn--active' : ''}`}
+                type="button"
+                onClick={() => setRole(UserRole.CONTRACTOR)}
+              >
+                <Truck className="tg-role-selector__emoji" size={30} strokeWidth={2.2} aria-hidden="true" />
+                Подрядчик
+              </button>
+            </div>
+
+            <label className="tg-field">
+              <span className="tg-field__label">Имя</span>
+              <input className="tg-input" placeholder="Имя" value={name} onChange={(event) => setName(event.target.value)} />
+            </label>
+
+            <label className="tg-field">
+              <span className="tg-field__label">Email</span>
+              <input
+                className="tg-input"
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </label>
+
+            <label className="tg-field">
+              <span className="tg-field__label">Телефон</span>
+              <input className="tg-input" placeholder="Телефон" value={phone} onChange={(event) => setPhone(event.target.value)} />
+            </label>
+
+            <label className="tg-field">
+              <span className="tg-field__label">Пароль</span>
+              <input
+                className="tg-input"
+                type="password"
+                placeholder="Пароль"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </label>
+
+            <label className="tg-field">
+              <span className="tg-field__label">Подтвердите пароль</span>
+              <input
+                className="tg-input"
+                type="password"
+                placeholder="Подтвердите пароль"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+              />
+            </label>
+
+            <button className="tg-btn tg-btn--primary tg-btn--block" type="submit" disabled={registerMutation.isPending}>
+              {registerMutation.isPending ? 'Регистрация...' : 'Зарегистрироваться'}
+            </button>
+
+            <p className="tg-auth__footer">
+              Уже есть аккаунт? <Link to="/login">Войти</Link>
+            </p>
+          </form>
         </div>
-
-        <Form
-          name="register"
-          onFinish={handleSubmit}
-          layout="vertical"
-          size="large"
-          initialValues={{ role: UserRole.CUSTOMER }}
-        >
-          <Form.Item
-            name="role"
-            label="Тип аккаунта"
-            rules={[{ required: true, message: 'Выберите тип аккаунта' }]}
-          >
-            <Radio.Group>
-              <Radio.Button value={UserRole.CUSTOMER}>Заказчик</Radio.Button>
-              <Radio.Button value={UserRole.CONTRACTOR}>Подрядчик</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-
-          <Form.Item
-            name="name"
-            label="Имя"
-            rules={[{ required: true, message: 'Введите имя' }]}
-          >
-            <Input
-              prefix={<UserOutlined style={{ color: '#8f9698' }} />}
-              placeholder="Иван Иванов"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              { required: true, message: 'Введите email' },
-              { type: 'email', message: 'Введите корректный email' },
-            ]}
-          >
-            <Input
-              prefix={<MailOutlined style={{ color: '#8f9698' }} />}
-              placeholder="email@example.com"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="phone"
-            label="Телефон"
-            rules={[
-              { required: true, message: 'Введите телефон' },
-              { pattern: /^[\d\s\+\-\(\)]+$/, message: 'Введите корректный телефон' },
-            ]}
-          >
-            <Input
-              prefix={<PhoneOutlined style={{ color: '#8f9698' }} />}
-              placeholder="+7 900 123-45-67"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            label="Пароль"
-            rules={[
-              { required: true, message: 'Введите пароль' },
-              { min: 8, message: 'Пароль должен содержать минимум 8 символов' },
-            ]}
-          >
-            <Input.Password
-              prefix={<LockOutlined style={{ color: '#8f9698' }} />}
-              placeholder="Минимум 8 символов"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="confirmPassword"
-            label="Подтвердите пароль"
-            dependencies={['password']}
-            rules={[
-              { required: true, message: 'Подтвердите пароль' },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error('Пароли не совпадают'));
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              prefix={<LockOutlined style={{ color: '#8f9698' }} />}
-              placeholder="Повторите пароль"
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              loading={registerMutation.isPending}
-            >
-              Зарегистрироваться
-            </Button>
-          </Form.Item>
-
-          <div style={{ textAlign: 'center' }}>
-            <Text type="secondary">
-              Уже есть аккаунт?{' '}
-              <Link to="/login" style={{ color: '#0d94db', fontWeight: 500 }}>
-                Войти
-              </Link>
-            </Text>
-          </div>
-        </Form>
-      </Card>
-    </div>
+      </section>
+    </main>
   );
 };

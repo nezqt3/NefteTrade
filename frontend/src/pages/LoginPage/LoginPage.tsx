@@ -1,19 +1,19 @@
-import React from 'react';
-import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { authApi, LoginDto } from '@features/auth/api/authApi';
+import { authApi } from '@features/auth/api/authApi';
 import { useAuthStore } from '@app/store/authStore';
-
-const { Title, Text } = Typography;
+import '../AuthPages.css';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const setUser = useAuthStore((state) => state.setUser);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const loginMutation = useMutation({
-    mutationFn: (data: LoginDto) => authApi.login(data),
+    mutationFn: () => authApi.login({ email, password }),
     onSuccess: (data) => {
       localStorage.setItem('accessToken', data.accessToken);
       if (data.refreshToken) {
@@ -21,7 +21,7 @@ export const LoginPage: React.FC = () => {
       }
       localStorage.setItem('userId', data.user.id);
       setUser(data.user);
-      message.success('Вход выполнен успешно!');
+      message.success('Вход выполнен успешно');
       navigate('/');
     },
     onError: () => {
@@ -29,86 +29,58 @@ export const LoginPage: React.FC = () => {
     },
   });
 
-  const handleSubmit = (values: LoginDto) => {
-    loginMutation.mutate(values);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!email || !password) {
+      message.error('Заполните email и пароль');
+      return;
+    }
+    loginMutation.mutate();
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #e4eaec 0%, #75c0e3 100%)',
-        padding: '20px',
-      }}
-    >
-      <Card
-        style={{
-          width: '100%',
-          maxWidth: '440px',
-          borderRadius: '16px',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-        }}
-      >
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <Title level={2} style={{ color: '#0d94db', marginBottom: '8px' }}>
-            OilTransport
-          </Title>
-          <Text type="secondary">Войдите в свой аккаунт</Text>
+    <main className="tg-auth tg-page-animate">
+      <section className="tg-auth__card">
+        <div className="tg-auth__stripe" aria-hidden="true" />
+        <div className="tg-auth__inner">
+          <h1 className="tg-auth__logo tg-gradient-text">ТрансГарант</h1>
+          <p className="tg-auth__subtitle">Войдите в свой аккаунт</p>
+
+          <form className="tg-auth__form" onSubmit={handleSubmit}>
+            <label className="tg-field">
+              <span className="tg-field__label">Email</span>
+              <input
+                className="tg-input"
+                type="email"
+                placeholder="Email"
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </label>
+
+            <label className="tg-field">
+              <span className="tg-field__label">Пароль</span>
+              <input
+                className="tg-input"
+                type="password"
+                placeholder="Пароль"
+                autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </label>
+
+            <button className="tg-btn tg-btn--primary tg-btn--block" type="submit" disabled={loginMutation.isPending}>
+              {loginMutation.isPending ? 'Вход...' : 'Войти'}
+            </button>
+
+            <p className="tg-auth__footer">
+              Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+            </p>
+          </form>
         </div>
-
-        <Form
-          name="login"
-          onFinish={handleSubmit}
-          layout="vertical"
-          size="large"
-        >
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Введите email' },
-              { type: 'email', message: 'Введите корректный email' },
-            ]}
-          >
-            <Input
-              prefix={<UserOutlined style={{ color: '#8f9698' }} />}
-              placeholder="Email"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Введите пароль' }]}
-          >
-            <Input.Password
-              prefix={<LockOutlined style={{ color: '#8f9698' }} />}
-              placeholder="Пароль"
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              loading={loginMutation.isPending}
-            >
-              Войти
-            </Button>
-          </Form.Item>
-
-          <div style={{ textAlign: 'center' }}>
-            <Text type="secondary">
-              Нет аккаунта?{' '}
-              <Link to="/register" style={{ color: '#0d94db', fontWeight: 500 }}>
-                Зарегистрироваться
-              </Link>
-            </Text>
-          </div>
-        </Form>
-      </Card>
-    </div>
+      </section>
+    </main>
   );
 };

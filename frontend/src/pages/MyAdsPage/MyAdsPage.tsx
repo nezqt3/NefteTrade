@@ -1,62 +1,40 @@
-import React from "react";
-import { Layout, List, Spin, Empty, Typography } from "antd";
-import { useQuery } from "@tanstack/react-query";
-import { adsApi } from "@features/ads/api/adsApi";
-import { AdCard } from "@entities/ad/ui/AdCard";
-
-const { Content } = Layout;
-const { Title } = Typography;
+import React from 'react';
+import { Empty, Spin } from 'antd';
+import { useQuery } from '@tanstack/react-query';
+import { adsApi } from '@features/ads/api/adsApi';
+import { AdCard } from '@entities/ad/ui/AdCard';
+import './MyAdsPage.css';
 
 export const MyAdsPage: React.FC = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ["my-ads"],
+    queryKey: ['my-ads'],
     queryFn: () => adsApi.getMyAds(),
   });
 
   const ads = data || [];
 
   return (
-    <Layout style={{ minHeight: "100vh", background: "#f5f5f5" }}>
-      <Content style={{ padding: "24px 50px" }}>
-        <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
-          <Title level={2} style={{ marginBottom: "24px" }}>
-            Мои объявления
-          </Title>
+    <main className="tg-my-ads tg-page tg-page-animate">
+      <div className="tg-container">
+        <header className="tg-my-ads__header">
+          <h1>Мои объявления</h1>
+          <p>Управляйте своими активными заказами в едином интерфейсе.</p>
+        </header>
 
-          {isLoading ? (
-            <div style={{ textAlign: "center", padding: "60px 0" }}>
-              <Spin size="large" />
-            </div>
-          ) : ads.length === 0 ? (
-            <Empty
-              description="У вас пока нет объявлений"
-              style={{
-                padding: "60px 0",
-                background: "white",
-                borderRadius: "12px",
-              }}
-            />
-          ) : (
-            <List
-              grid={{
-                gutter: 24,
-                xs: 1,
-                sm: 1,
-                md: 2,
-                lg: 2,
-                xl: 3,
-                xxl: 3,
-              }}
-              dataSource={ads}
-              renderItem={(ad) => (
-                <List.Item>
-                  <AdCard ad={ad} showContactButton={false} />
-                </List.Item>
-              )}
-            />
-          )}
-        </div>
-      </Content>
-    </Layout>
+        {isLoading ? (
+          <div className="tg-my-ads__loading">
+            <Spin size="large" />
+          </div>
+        ) : ads.length === 0 ? (
+          <Empty className="tg-my-ads__empty" description="У вас пока нет объявлений" />
+        ) : (
+          <div className="tg-my-ads__grid">
+            {ads.map((ad) => (
+              <AdCard key={ad.id} ad={ad} showContactButton={false} />
+            ))}
+          </div>
+        )}
+      </div>
+    </main>
   );
 };

@@ -1,0 +1,18 @@
+/* Chat Page */
+.tg-chat-page {
+  padding: 20px 0 28px;
+}
+
+.tg-chat-page__container {
+  min-height: calc(100vh - 120px);
+}
+
+@media (max-width: 768px) {
+  .tg-chat-page {
+    padding: 10px 0 0;
+  }
+
+  .tg-chat-page__container {
+    padding: 0;
+  }
+}

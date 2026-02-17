@@ -2,15 +2,11 @@ export const theme = {
   colors: {
     primary: '#0d94db',
     primaryLight: '#75c0e3',
-    primaryDark: '#4cabda',
-    background: '#e4eaec',
-    backgroundAlt: '#e4eaec',
-    textLight: '#acacb4',
-    textMedium: '#aeb4b4',
-    textGray: '#8f9698',
-    textDark: '#5e6669',
-    textDarker: '#4c5c5c',
-    textDarkest: '#4c545c',
+    primaryDark: '#0a7bc4',
+    background: '#fafbfc',
+    textLight: '#718096',
+    textMedium: '#2d3748',
+    textDark: '#0a0e27',
   },
   breakpoints: {
     xs: '480px',
@@ -18,7 +14,7 @@ export const theme = {
     md: '768px',
     lg: '992px',
     xl: '1200px',
-    xxl: '1600px',
+    xxl: '1400px',
   },
 };
 
@@ -27,18 +23,9 @@ export const antdTheme = {
     colorPrimary: theme.colors.primary,
     colorLink: theme.colors.primary,
     colorSuccess: '#52c41a',
-    colorWarning: '#faad14',
+    colorWarning: '#fbbf24',
     colorError: '#ff4d4f',
-    borderRadius: 8,
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-  },
-  components: {
-    Layout: {
-      headerBg: '#ffffff',
-      bodyBg: theme.colors.background,
-    },
-    Button: {
-      primaryShadow: '0 2px 0 rgba(13, 148, 219, 0.1)',
-    },
+    borderRadius: 12,
+    fontFamily: 'Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   },
 };

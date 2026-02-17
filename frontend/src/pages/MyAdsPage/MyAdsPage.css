@@ -1,0 +1,37 @@
+/* My Ads */
+.tg-my-ads__header {
+  margin-bottom: 18px;
+}
+
+.tg-my-ads__header h1 {
+  font-size: clamp(34px, 6vw, 52px);
+  margin-bottom: 8px;
+}
+
+.tg-my-ads__header p {
+  color: var(--text-medium);
+}
+
+.tg-my-ads__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(16px, 3vw, 24px);
+}
+
+.tg-my-ads__loading,
+.tg-my-ads__empty {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.tg-my-ads__empty {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(13, 148, 219, 0.14);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+  .tg-my-ads__grid {
+    grid-template-columns: 1fr;
+  }
+}
